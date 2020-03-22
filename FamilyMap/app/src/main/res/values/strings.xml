@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">FamilyMap</string>
+
+    <string name="server_host">Server Host</string>
+    <string name="server_port">Server Port</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email">Email</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+
+    <string name="login_success">Welcome</string>
+    <string name="login_fail">Login Failed</string>
+
+    <string name="register_success">Welcome</string>
+    <string name="register_fail">Register Failed</string>
+</resources>
