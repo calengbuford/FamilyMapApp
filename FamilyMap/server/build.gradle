@@ -1,8 +1,9 @@
 apply plugin: 'java-library'
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(path: ':shared')
+    implementation project(path: ':gson-2.6.2')
+    implementation fileTree(dir: 'libs/jars', include: ['*.aar', '*.jar'], exclude: [])
 
 }
 

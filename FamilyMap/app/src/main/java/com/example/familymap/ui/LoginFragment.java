@@ -1,6 +1,5 @@
 package com.example.familymap.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,11 +18,12 @@ import com.example.familymap.R;
 import com.example.familymap.activities.MainActivity;
 import com.example.familymap.network.LoginTask;
 import com.example.familymap.network.RegisterTask;
+import com.example.shared.request_.LoginRequest;
+import com.example.shared.request_.RegisterRequest;
 import com.example.shared.response_.LoginResponse;
 import com.example.shared.response_.RegisterResponse;
 
-//public class LoginFragment extends Fragment implements LoginTask.Context {
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements LoginTask.Listener, RegisterTask.Listener {
     private EditText serverHostTextEntry;
     private EditText serverPortTextEntry;
     private EditText usernameTextEntry;
@@ -33,9 +33,9 @@ public class LoginFragment extends Fragment {
     private EditText emailTextEntry;
 
     private RadioGroup genderRadioGroup;
-    private RadioButton genderRadio;
     private RadioButton maleRadio;
     private RadioButton femaleRadio;
+    private String genderString;
 
     private Button loginBtn;
     private Button registerBtn;
@@ -224,10 +224,14 @@ public class LoginFragment extends Fragment {
 
     private void loginClick() {
         try {
-            LoginTask loginTask = new LoginTask(serverHostTextEntry.getText().toString(),
+            // Create login request
+            LoginRequest loginRequest = new LoginRequest(usernameTextEntry.getText().toString(),
+                    passwordTextEntry.getText().toString());
+
+            // Execute task
+            LoginTask loginTask = new LoginTask(this, serverHostTextEntry.getText().toString(),
                     serverPortTextEntry.getText().toString());
-//            loginTask.setContext(this);
-            loginTask.execute();
+            loginTask.execute(loginRequest);
         }
         catch (Exception e) {
             System.out.println(e);
@@ -236,51 +240,89 @@ public class LoginFragment extends Fragment {
 
     private void registerClick() {
         try {
-            RegisterTask registerTask = new RegisterTask(serverHostTextEntry.getText().toString(),
+            // Create register request
+            RegisterRequest registerRequest = new RegisterRequest(usernameTextEntry.getText().toString(),
+                    passwordTextEntry.getText().toString(), emailTextEntry.getText().toString(),
+                    firstNameTextEntry.getText().toString(), lastNameTextEntry.getText().toString(),
+                    getGenderString());
+
+            // Execute task
+            RegisterTask registerTask = new RegisterTask(this, serverHostTextEntry.getText().toString(),
                     serverPortTextEntry.getText().toString());
-//            registerTask.setContext(this);
-            registerTask.execute();
+            registerTask.execute(registerRequest);
         }
         catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    public void loginComplete(LoginResponse response) {
-        if (response.getSuccess()) {
-            String toastMessage = "Welcome " + response.getUserName();
-            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-            toast.show();
-            closeSelfFragment();
+    private String getGenderString() {
+        if (maleRadio.isChecked()) {
+            return "m";
         }
         else {
-            String toastMessage = response.getMessage();
-            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-            toast.show();
-        }
-    }
-
-    public void registerComplete(RegisterResponse response) {
-        if (response.getSuccess()) {
-            String toastMessage = "Welcome " + response.getUserName();
-            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-            toast.show();
-            closeSelfFragment();
-        }
-        else {
-            String toastMessage = response.getMessage();
-            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-            toast.show();
+            return "f";
         }
     }
 
     private void closeSelfFragment() {
         MainActivity parent = (MainActivity) getActivity();
-        parent.replaceLoginFragment();
+        if (parent != null) {
+            parent.replaceLoginFragment();
+        }
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//    }
+    @Override
+    public void onError(Error e) { }
+
+    @Override
+    public void registerComplete(RegisterResponse registerResponse) {
+        String errorMessage = "Register Failed";
+        Boolean success = false;
+
+        // Check success of register
+        if (registerResponse != null) {
+            errorMessage += "\n(" + registerResponse.getMessage() + ")";
+            success = registerResponse.getSuccess();
+        }
+
+        // Send toast
+        if (success) {
+            String toastMessage = "Welcome " + firstNameTextEntry.getText().toString() +
+                    " " + lastNameTextEntry.getText().toString();
+            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
+            toast.show();
+            closeSelfFragment();
+        }
+        else {
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    @Override
+    public void loginComplete(LoginResponse loginResponse) {
+        String errorMessage = "Login Failed";
+        Boolean success = false;
+
+        // Check success of login
+        if (loginResponse != null) {
+            errorMessage += "\n(" + loginResponse.getMessage() + ")";
+            success = loginResponse.getSuccess();
+        }
+
+        // Send toast
+        if (success) {
+            String toastMessage = "Welcome " + firstNameTextEntry.getText().toString() +
+                    " " + lastNameTextEntry.getText().toString();
+            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
+            toast.show();
+            closeSelfFragment();
+        }
+        else {
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
 }

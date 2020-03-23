@@ -1,4 +1,4 @@
 rootProject.name='FamilyMap'
-include ':app'
+include ':app', ':gson-2.6.2'
 include ':server'
 include ':shared'

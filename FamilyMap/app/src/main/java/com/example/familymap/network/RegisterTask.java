@@ -1,33 +1,39 @@
 package com.example.familymap.network;
 
-import android.content.Context;
 import android.os.AsyncTask;
 
 import com.example.shared.request_.RegisterRequest;
 import com.example.shared.response_.RegisterResponse;
 
 public class RegisterTask extends AsyncTask<RegisterRequest, Void, RegisterResponse> {
-    private Proxy proxy;
-    private Context context;
+    private String serverHost;
+    private String serverPort;
 
-    public RegisterTask(String serverHost, String serverPort) {
-        proxy = new Proxy(serverHost, serverPort);
+    public interface Listener {
+        void onError(Error e);
+        void registerComplete(RegisterResponse registerResponse);
     }
 
-    public void setContext(Context context) {
-        this.context = context;
+    private Listener listener;
+
+    public RegisterTask(Listener listener, String serverHost, String serverPort) {
+        this.listener = listener;
+        this.serverHost = serverHost;
+        this.serverPort = serverPort;
     }
 
     @Override
     protected RegisterResponse doInBackground(RegisterRequest... registerRequests) {
-
-
-
-        return null;
+        if (registerRequests.length == 0) {
+            return null;
+        }
+        // Connect with server through proxy
+        RegisterResponse response = Proxy.register(serverHost, serverPort, registerRequests[0]);
+        return response;
     }
 
     @Override
     protected void onPostExecute(RegisterResponse registerResponse) {
-        // call registerComplete(registerResponse);
+        listener.registerComplete(registerResponse);
     }
 }
