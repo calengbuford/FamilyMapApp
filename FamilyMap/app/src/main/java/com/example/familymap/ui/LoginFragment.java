@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.familymap.R;
 import com.example.familymap.activities.MainActivity;
+import com.example.familymap.client.Client;
 import com.example.familymap.network.LoginTask;
 import com.example.familymap.network.RegisterTask;
 import com.example.shared.request_.LoginRequest;
@@ -35,10 +36,11 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
     private RadioGroup genderRadioGroup;
     private RadioButton maleRadio;
     private RadioButton femaleRadio;
-    private String genderString;
 
     private Button loginBtn;
     private Button registerBtn;
+
+    Client client;
 
     public LoginFragment() {
     }
@@ -302,8 +304,9 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
 
     @Override
     public void loginComplete(LoginResponse loginResponse) {
-        String errorMessage = "Login Failed";
+        String errorMessage = "Login Failed\n(incorrect username or password)";
         Boolean success = false;
+        client = Client.getInstance();
 
         // Check success of login
         if (loginResponse != null) {
@@ -313,7 +316,7 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
 
         // Send toast
         if (success) {
-            String toastMessage = "Welcome ";
+            String toastMessage = "Welcome " + client.getUser().getFirstName() + " " + client.getUser().getLastName();
             Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
             toast.show();
             closeSelfFragment();
