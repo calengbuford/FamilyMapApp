@@ -60,18 +60,11 @@ public class Proxy {
         try {
             URL url = new URL("http://" + serverHost + ":" + serverPort + "/user/register");
 
-            System.out.println("in Proxy, URL has been set");
-
             // Start constructing HTTP request
             HttpURLConnection http = (HttpURLConnection)url.openConnection();
-
-            System.out.println("in Proxy, http has connection opened");
-
             http.setRequestMethod("POST");
             http.setDoOutput(true);     // Indicate that request will contain an HTTP request body
             http.connect();             // Connect to the server and send the HTTP request
-
-            System.out.println("in Proxy, http has connected");
 
             // The JSON string to send in the HTTP request body
             String reqJson = gson.toJson(request);
@@ -81,8 +74,6 @@ public class Proxy {
             writeString(reqJson, reqBody);
 
             reqBody.close();
-
-            System.out.println("in Proxy, reqBody had been closed");
 
             // Check that the HTTP response from the server contains a 200 status code
             if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {

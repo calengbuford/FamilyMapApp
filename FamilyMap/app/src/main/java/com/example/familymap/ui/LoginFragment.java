@@ -277,7 +277,7 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
 
     @Override
     public void registerComplete(RegisterResponse registerResponse) {
-        String errorMessage = "Register Failed";
+        String errorMessage = "Register Failed\n(username already exists)";
         Boolean success = false;
 
         // Check success of register
@@ -313,8 +313,7 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
 
         // Send toast
         if (success) {
-            String toastMessage = "Welcome " + firstNameTextEntry.getText().toString() +
-                    " " + lastNameTextEntry.getText().toString();
+            String toastMessage = "Welcome ";
             Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
             toast.show();
             closeSelfFragment();

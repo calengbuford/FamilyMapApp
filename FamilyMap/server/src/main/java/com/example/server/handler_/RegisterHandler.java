@@ -22,6 +22,7 @@ public class RegisterHandler implements HttpHandler {
         RegisterService service = new RegisterService();
         Gson gson = new Gson();
         boolean success = false;
+        boolean headerSent = false;
 
         try {
             // Determine the HTTP request type
@@ -52,9 +53,11 @@ public class RegisterHandler implements HttpHandler {
                 if ("Error: User already registered in the database".equals(response.getMessage()) ||
                         "Error: Invalid request value".equals(response.getMessage())) {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                    headerSent = true;
                 }
                 else {
                     exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                    headerSent = true;
                 }
                 OutputStream respBody = exchange.getResponseBody();
                 respBody.write(array);
@@ -66,7 +69,9 @@ public class RegisterHandler implements HttpHandler {
             if (!success) {
                 // The HTTP request was invalid somehow, so we return a "bad request"
                 // status code to the client.
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                if (!headerSent) {
+                    exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                }
                 // Since the client request was invalid, they will not receive the
                 // list of games, so we close the response body output stream,
                 // indicating that the response is complete.
@@ -76,7 +81,9 @@ public class RegisterHandler implements HttpHandler {
         catch (Exception e) {
             // Some kind of internal error has occurred inside the server (not the
             // client's fault), so we return an "internal server error" status code to the client.
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+            if (!headerSent) {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_SERVER_ERROR, 0);
+            }
             // Since the server is unable to complete the request, the client will
             // not receive the list of games, so we close the response body output stream,
             // indicating that the response is complete.

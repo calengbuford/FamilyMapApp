@@ -16,6 +16,7 @@ public class RegisterTask extends AsyncTask<RegisterRequest, Void, RegisterRespo
 
     private Listener listener;
 
+    // Constructor for RegisterTask
     public RegisterTask(Listener listener, String serverHost, String serverPort) {
         this.listener = listener;
         this.serverHost = serverHost;

@@ -16,6 +16,7 @@ public class LoginTask extends AsyncTask<LoginRequest, Void, LoginResponse> {
 
     private Listener listener;
 
+    // Constructor for LoginTask
     public LoginTask(Listener listener, String serverHost, String serverPort) {
         this.listener = listener;
         this.serverHost = serverHost;

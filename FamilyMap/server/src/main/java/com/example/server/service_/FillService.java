@@ -43,16 +43,16 @@ public class FillService {
 
         // Read in json files for data filling
         Gson gson = new Gson();
-        Reader reader1 = new FileReader("json/fnames.json");
+        Reader reader1 = new FileReader("server/json/fnames.json");
         femaleNames = gson.fromJson(reader1, FNameData.class);
 
-        Reader reader2 = new FileReader("json/mnames.json");
+        Reader reader2 = new FileReader("server/json/mnames.json");
         maleNames = gson.fromJson(reader2, MNameData.class);
 
-        Reader reader3 = new FileReader("json/snames.json");
+        Reader reader3 = new FileReader("server/json/snames.json");
         lastNames = gson.fromJson(reader3, LNameData.class);
 
-        Reader reader4 = new FileReader("json/locations.json");
+        Reader reader4 = new FileReader("server/json/locations.json");
         locData = gson.fromJson(reader4, LocationData.class);
     }
 
