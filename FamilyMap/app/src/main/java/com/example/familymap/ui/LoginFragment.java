@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.example.familymap.R;
 import com.example.familymap.activities.MainActivity;
 import com.example.familymap.client.Client;
+import com.example.familymap.network.DataSyncTask;
 import com.example.familymap.network.LoginTask;
 import com.example.familymap.network.RegisterTask;
 import com.example.shared.request_.LoginRequest;
@@ -24,7 +25,7 @@ import com.example.shared.request_.RegisterRequest;
 import com.example.shared.response_.LoginResponse;
 import com.example.shared.response_.RegisterResponse;
 
-public class LoginFragment extends Fragment implements LoginTask.Listener, RegisterTask.Listener {
+public class LoginFragment extends Fragment implements LoginTask.Listener, RegisterTask.Listener, DataSyncTask.Listener {
     private EditText serverHostTextEntry;
     private EditText serverPortTextEntry;
     private EditText usernameTextEntry;
@@ -42,8 +43,7 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
 
     Client client;
 
-    public LoginFragment() {
-    }
+    public LoginFragment() { }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -267,13 +267,6 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
         }
     }
 
-    private void closeSelfFragment() {
-        MainActivity parent = (MainActivity) getActivity();
-        if (parent != null) {
-            parent.replaceLoginFragment();
-        }
-    }
-
     @Override
     public void onError(Error e) { }
 
@@ -288,13 +281,10 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
             success = registerResponse.getSuccess();
         }
 
-        // Send toast
+        // Sync data with client
         if (success) {
-            String toastMessage = "Welcome " + firstNameTextEntry.getText().toString() +
-                    " " + lastNameTextEntry.getText().toString();
-            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-            toast.show();
-            closeSelfFragment();
+            DataSyncTask dataSyncTask = new DataSyncTask(this, serverHostTextEntry.getText().toString(), serverPortTextEntry.getText().toString());
+            dataSyncTask.execute(registerResponse.getAuthToken(), registerResponse.getPersonID());
         }
         else {
             Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
@@ -314,16 +304,36 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
             success = loginResponse.getSuccess();
         }
 
-        // Send toast
+        // Sync data with client
         if (success) {
-            String toastMessage = "Welcome " + client.getUser().getFirstName() + " " + client.getUser().getLastName();
+            DataSyncTask dataSyncTask = new DataSyncTask(this, serverHostTextEntry.getText().toString(), serverPortTextEntry.getText().toString());
+            dataSyncTask.execute(loginResponse.getAuthToken(), loginResponse.getPersonID());
+        }
+        else {
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+    @Override
+    public void dataSyncTaskComplete(Boolean syncSuccess) {
+        if (syncSuccess) {
+            String toastMessage = "Welcome " + client.getPerson().getFirstName() + " " + client.getPerson().getLastName();
             Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
             toast.show();
             closeSelfFragment();
         }
         else {
-            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            String toastMessage = "Error: Data could not sync correctly";
+            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
             toast.show();
+        }
+    }
+
+    private void closeSelfFragment() {
+        MainActivity parent = (MainActivity) getActivity();
+        if (parent != null) {
+            parent.replaceLoginFragment();
         }
     }
 

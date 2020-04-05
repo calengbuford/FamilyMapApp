@@ -35,10 +35,6 @@ public class LoginTask extends AsyncTask<LoginRequest, Void, LoginResponse> {
 
     @Override
     protected void onPostExecute(LoginResponse loginResponse) {
-        if (loginResponse != null) {
-            DataSyncTask dataSyncTask = new DataSyncTask(serverHost, serverPort);
-            dataSyncTask.execute(loginResponse.getAuthToken(), loginResponse.getPersonID());
-        }
         listener.loginComplete(loginResponse);
     }
 }
