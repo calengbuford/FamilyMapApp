@@ -41,7 +41,7 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
     private Button loginBtn;
     private Button registerBtn;
 
-    Client client;
+    private Client client;
 
     public LoginFragment() { }
 

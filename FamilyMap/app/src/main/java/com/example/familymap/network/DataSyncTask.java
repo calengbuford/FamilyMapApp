@@ -3,12 +3,17 @@ package com.example.familymap.network;
 import android.os.AsyncTask;
 
 import com.example.familymap.client.Client;
+import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 import com.example.shared.model_.User;
 import com.example.shared.response_.PersonIDResponse;
 import com.example.shared.response_.PersonResponse;
 import com.example.shared.response_.EventResponse;
 import com.example.shared.response_.RegisterResponse;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class DataSyncTask extends AsyncTask<String, Void, Boolean> {
     private String serverHost;
@@ -74,7 +79,15 @@ public class DataSyncTask extends AsyncTask<String, Void, Boolean> {
 
             // Set family persons info
             if (personResponse != null && personResponse.getSuccess()) {
-                client.setUsersFamily(personResponse.getData());
+                Person[] family = personResponse.getData();
+                client.setUsersFamily(family);      // Store the list of family members
+
+                // Store a map from each person's ID to their Person object
+                HashMap<String, Person> familyDict = new HashMap<String, Person>();
+                for (Person person : family) {
+                    familyDict.put(person.getPersonID(), person);
+                }
+                client.setUserFamilyDict(familyDict);
                 System.out.println("Family persons synced");
             }
             else {
@@ -83,7 +96,24 @@ public class DataSyncTask extends AsyncTask<String, Void, Boolean> {
 
             // Set family events info
             if (eventResponse != null && eventResponse.getSuccess()) {
-                client.setFamilyEvents(eventResponse.getData());
+                Event[] events = eventResponse.getData();
+                client.setFamilyEvents(events);      // Store the list of family events
+
+                // Store a map from each person's ID to a list of their Event object
+                HashMap<String, List<Event>> eventDict = new HashMap<String, List<Event>>();
+                for (Event event : events) {
+                    String eventPersonID = event.getPersonID();
+                    List<Event> eventList = new ArrayList<Event>();
+
+                    // Add event to list of events for person ID
+                    if (eventDict.containsKey(eventPersonID)) {
+                        eventList = eventDict.get(eventPersonID);
+                    }
+                    eventList.add(event);
+
+                    eventDict.put(event.getPersonID(), eventList);
+                }
+                client.setUserEventDict(eventDict);
                 System.out.println("Family events synced");
             }
             else {
