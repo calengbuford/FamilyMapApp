@@ -5,11 +5,9 @@ import android.os.AsyncTask;
 import com.example.familymap.client.Client;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
-import com.example.shared.model_.User;
 import com.example.shared.response_.PersonIDResponse;
 import com.example.shared.response_.PersonResponse;
 import com.example.shared.response_.EventResponse;
-import com.example.shared.response_.RegisterResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -100,6 +98,8 @@ public class DataSyncTask extends AsyncTask<String, Void, Boolean> {
                 client.setFamilyEvents(events);      // Store the list of family events
 
                 // Store a map from each person's ID to a list of their Event object
+                int counter = 0;
+                String[] colors = client.getColors();
                 HashMap<String, List<Event>> eventDict = new HashMap<String, List<Event>>();
                 for (Event event : events) {
                     String eventPersonID = event.getPersonID();
@@ -110,8 +110,13 @@ public class DataSyncTask extends AsyncTask<String, Void, Boolean> {
                         eventList = eventDict.get(eventPersonID);
                     }
                     eventList.add(event);
-
                     eventDict.put(event.getPersonID(), eventList);
+
+                    // Add event type to color dictionary if necessary
+                    if (!client.getEventColors().containsKey(event.getEventType())) {
+                        client.getEventColors().put(event.getEventType(), Float.valueOf(colors[counter % colors.length]));
+                    }
+                    counter++;
                 }
                 client.setUserEventDict(eventDict);
                 System.out.println("Family events synced");

@@ -41,13 +41,14 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
-        map.setOnMapLoadedCallback(this);
+        try {
+            map = googleMap;
+            map.setOnMapLoadedCallback(this);
 
-        client = Client.getInstance();
-        float color;
+            client = Client.getInstance();
+            float color;
 
-        // Make the auto-focus marker the birth event of the user person
+            // Make the auto-focus marker the birth event of the user person
 //        Person person = client.getPerson();
 //        List<Event> eventList = client.getUserEventDict().get(person.getPersonID());
 //        if (eventList != null) {
@@ -67,28 +68,31 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 //            }
 //        }
 
-        // Add a marker in Park City and move the camera
+            // Add a marker in Park City and move the camera
 //        LatLng parkCity = new LatLng(40.6461, -111.4980);
 //        map.addMarker(new MarkerOptions().position(parkCity).title("Park City"));
 //        map.animateCamera(CameraUpdateFactory.newLatLng(parkCity));
 
-        Event[] familyEvents = client.getFamilyEvents();
+            Event[] familyEvents = client.getFamilyEvents();
 
-        for (Event event : familyEvents) {
-            color = getEventMarkerColor(event.getEventType());
+            for (Event event : familyEvents) {
+                color = client.getEventColors().get(event.getEventType());
 
-            // Add the event to the map as a marker
-            Marker marker = map.addMarker(new MarkerOptions()
-                    .position(new LatLng(event.getLatitude(), event.getLongitude()))
-                    .icon(BitmapDescriptorFactory.defaultMarker(color))
-                    .title(event.getEventType()));
-            marker.setTag(event);
+                // Add the event to the map as a marker
+                Marker marker = map.addMarker(new MarkerOptions()
+                        .position(new LatLng(event.getLatitude(), event.getLongitude()))
+                        .icon(BitmapDescriptorFactory.defaultMarker(color))
+                        .title(event.getEventType()));
+                marker.setTag(event);
+            }
+
+            // TODO: MAKE EACH EVENT CLICKABLE AND INTERACTIVE
+            // Set a listener for marker click.
+            map.setOnMarkerClickListener(this);
         }
-
-        // TODO: MAKE EACH EVENT CLICKABLE AND INTERACTIVE
-        // Set a listener for marker click.
-        map.setOnMarkerClickListener(this);
-
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /** Called when the user clicks a marker. */
@@ -117,24 +121,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         // onMapReady(...) because the map isn't really all the way ready. If you see that, just
         // move all code where you interact with the map (everything after
         // map.setOnMapLoadedCallback(...) above) to here.
-    }
-
-    private float getEventMarkerColor(String eventType) {
-        if ("birth".equals(eventType)) {
-            return BitmapDescriptorFactory.HUE_GREEN;
-        }
-        else if ("christening".equals(eventType)) {
-            return BitmapDescriptorFactory.HUE_CYAN;
-        }
-        else if ("marriage".equals(eventType)) {
-            return BitmapDescriptorFactory.HUE_ROSE;
-        }
-        else if ("death".equals(eventType)) {
-            return BitmapDescriptorFactory.HUE_BLUE;
-        }
-        else {
-            return BitmapDescriptorFactory.HUE_YELLOW;
-        }
     }
 
 }

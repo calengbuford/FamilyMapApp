@@ -14,6 +14,8 @@ public class Client {
     private Person[] usersFamily;
     private HashMap<String, Person> userFamilyDict;
     private HashMap<String, List<Event>> userEventDict;
+    private HashMap<String, Float> eventColors = new HashMap<String, Float>();
+    static final private String[] colors = { "210.0", "240.0", "180.0", "120.0", "30.0", "0.0", "330.0", "60.0" };
 
     private Client() {
         person = null;
@@ -69,4 +71,15 @@ public class Client {
         this.userEventDict = userEventDict;
     }
 
+    public HashMap<String, Float> getEventColors() {
+        return eventColors;
+    }
+
+    public void setEventColors(HashMap<String, Float> eventColors) {
+        this.eventColors = eventColors;
+    }
+
+    public static String[] getColors() {
+        return colors;
+    }
 }
