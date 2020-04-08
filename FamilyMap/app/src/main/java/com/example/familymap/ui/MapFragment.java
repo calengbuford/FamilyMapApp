@@ -1,5 +1,6 @@
 package com.example.familymap.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -10,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.familymap.activities.MainActivity;
+import com.example.familymap.activities.PersonActivity;
 import com.example.familymap.client.Client;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
@@ -120,6 +123,15 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
     private void clickEventInfoLayout(Event event) {
         // TODO: Open person activity
+        MainActivity parent = (MainActivity) getActivity();
+        Intent myIntent = new Intent(parent, PersonActivity.class);
+        myIntent.putExtra("personID", event.getPersonID()); //Optional parameters
+        try {
+            parent.startActivity(myIntent);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

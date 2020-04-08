@@ -10,6 +10,7 @@
     <string name="email">Email</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
+    <string name="gender">Gender</string>
 
     <string name="login">Login</string>
     <string name="register">Register</string>
@@ -20,4 +21,7 @@
     <string name="register_success">Welcome</string>
     <string name="register_fail">Register Failed</string>
     <string name="map_bottom_text">Click a marker to view an event</string>
+
+    <string name="life_event_list">Life Events</string>
+    <string name="direct_family_list">Family</string>
 </resources>
