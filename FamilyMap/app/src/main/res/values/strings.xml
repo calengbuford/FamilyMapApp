@@ -19,5 +19,5 @@
 
     <string name="register_success">Welcome</string>
     <string name="register_fail">Register Failed</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="map_bottom_text">Click a marker to view an event</string>
 </resources>

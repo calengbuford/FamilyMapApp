@@ -97,7 +97,7 @@ public class DataSyncTask extends AsyncTask<String, Void, Boolean> {
                 Event[] events = eventResponse.getData();
                 client.setFamilyEvents(events);      // Store the list of family events
 
-                // Store a map from each person's ID to a list of their Event object
+                // Store a map from each person's ID to a list of their Event objects
                 int counter = 0;
                 String[] colors = client.getColors();
                 HashMap<String, List<Event>> eventDict = new HashMap<String, List<Event>>();

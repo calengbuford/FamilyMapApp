@@ -55,6 +55,9 @@ public class Client {
         this.usersFamily = usersFamily;
     }
 
+    /**
+     *  Store a map from each person's ID to their Person object
+     */
     public HashMap<String, Person> getUserFamilyDict() {
         return userFamilyDict;
     }
@@ -63,6 +66,9 @@ public class Client {
         this.userFamilyDict = userFamilyDict;
     }
 
+    /**
+     * Store a map from each person's ID to a list of their Event objects
+     */
     public HashMap<String, List<Event>> getUserEventDict() {
         return userEventDict;
     }
