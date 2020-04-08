@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -61,17 +62,29 @@ public class PersonActivity extends AppCompatActivity {
                 Person mother = client.getUserFamilyDict().get(person.getMotherID());
                 Person spouse = client.getUserFamilyDict().get(person.getSpouseID());
 
+                // Add all family to one list and create a dictionary with indices mapping to titles
                 List<Person> directFamily = new ArrayList<Person>();
                 HashMap<Integer, String> familyTitles = new HashMap<Integer, String>();
-                directFamily.add(father);
-                familyTitles.put(0, "Father");
-                directFamily.add(mother);
-                familyTitles.put(1, "Mother");
-                directFamily.add(spouse);
-                familyTitles.put(2, "Spouse");
+                int counter = 0;
+                if (father != null) {
+                    directFamily.add(father);
+                    familyTitles.put(counter, "Father");
+                    counter++;
+                }
+                if (mother != null) {
+                    directFamily.add(mother);
+                    familyTitles.put(counter, "Mother");
+                    counter++;
+                }
+                if (spouse != null) {
+                    directFamily.add(spouse);
+                    familyTitles.put(counter, "Spouse");
+                    counter++;
+                }
+
                 for (int i = 0; i < children.size(); i++) {
                     directFamily.add(children.get(i));
-                    familyTitles.put(i + directFamily.size(), "Child");
+                    familyTitles.put(i + counter, "Child");
                 }
 
                 expandableListView.setAdapter(new ExpandableListAdapter(events, directFamily, familyTitles));
@@ -200,6 +213,7 @@ public class PersonActivity extends AppCompatActivity {
         }
 
         private void initializeEventsView(View eventsView, final int childPosition) {
+            // Connect with view and update fields
             TextView eventTypeText = eventsView.findViewById(R.id.eventType);
             String eventTypeString = events.get(childPosition).getEventType() + ": ";
             eventTypeText.setText(eventTypeString);
@@ -210,9 +224,11 @@ public class PersonActivity extends AppCompatActivity {
             eventInfoText.setText(eventInfoString);
 
             TextView nameText = eventsView.findViewById(R.id.eventPersonName);
-            String nameString = client.getUserFamilyDict().get(events.get(childPosition).getPersonID()).getFirstName() + " " +
-                    client.getUserFamilyDict().get(events.get(childPosition).getPersonID()).getLastName();
-            nameText.setText(nameString);
+            Person person = client.getUserFamilyDict().get(events.get(childPosition).getPersonID());
+            if (person != null) {
+                String nameString = person.getFirstName() + " " + person.getLastName();
+                nameText.setText(nameString);
+            }
 
             eventsView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -223,6 +239,7 @@ public class PersonActivity extends AppCompatActivity {
         }
 
         private void initializeDirectFamilyView(View directFamilyView, final int childPosition) {
+            // Connect with view and update fields
             TextView nameText = directFamilyView.findViewById(R.id.directFamilyName);
             String nameString = directFamily.get(childPosition).getFirstName() + " " + directFamily.get(childPosition).getLastName();
             nameText.setText(nameString);
@@ -230,6 +247,14 @@ public class PersonActivity extends AppCompatActivity {
             TextView titleText = directFamilyView.findViewById(R.id.directFamilyTitle);
             String titleString = familyTitles.get(childPosition);
             titleText.setText(titleString);
+
+            ImageView imageView = (ImageView) directFamilyView.findViewById(R.id.genderImg);
+            if ("m".equals(directFamily.get(childPosition).getGender())) {
+                imageView.setBackgroundResource(R.drawable.male_icon);
+            }
+            else {
+                imageView.setBackgroundResource(R.drawable.female_icon);
+            }
 
             directFamilyView.setOnClickListener(new View.OnClickListener() {
                 @Override
