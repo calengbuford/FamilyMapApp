@@ -1,8 +1,8 @@
 package com.example.familymap.client;
 
+import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,5 +19,7 @@ public class Filter {
         }
         return children;
     }
+
+
 
 }

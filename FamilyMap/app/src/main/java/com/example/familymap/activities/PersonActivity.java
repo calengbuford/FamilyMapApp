@@ -28,9 +28,12 @@ public class PersonActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent intent = getIntent();
-        String personID = intent.getStringExtra("personID");
+        String personID = intent.getStringExtra(String.valueOf(R.string.personID_intent));
         client = Client.getInstance();
 
         try {
@@ -53,7 +56,8 @@ public class PersonActivity extends AppCompatActivity {
 
                 ExpandableListView expandableListView = findViewById(R.id.expandableListView);
 
-                List<Event> events = client.getUserEventDict().get(personID);   // Get event for person
+                // Get sorted life events for person
+                List<Event> events = client.getLifeEvents(personID);
 
                 // Get direct family of person
                 Filter filter = new Filter();
@@ -233,7 +237,7 @@ public class PersonActivity extends AppCompatActivity {
             eventsView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: Open Event Activity
+                    clickEvent(events.get(childPosition).getEventID());
                 }
             });
         }
@@ -259,9 +263,24 @@ public class PersonActivity extends AppCompatActivity {
             directFamilyView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO: Open this Person's information
+                    clickFamilyMember(directFamily.get(childPosition).getPersonID());
                 }
             });
+        }
+
+        private void clickFamilyMember(String personID) {
+            // Open this Person's information in a new Person Activity
+            Intent intent = new Intent(PersonActivity.this, PersonActivity.class);
+            intent.putExtra(String.valueOf(R.string.personID_intent), personID);
+            PersonActivity.this.startActivity(intent);
+        }
+
+        private void clickEvent(String eventID) {
+            // Open event activity, which is the same Map Fragment in the main activity.
+            Intent intent = new Intent(PersonActivity.this, MainActivity.class);
+            intent.putExtra(String.valueOf(R.string.eventID_intent), eventID);
+            PersonActivity.this.startActivity(intent);
+
         }
 
         @Override

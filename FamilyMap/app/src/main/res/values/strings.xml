@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">FamilyMap</string>
+    <string name="login_fragment_tag">loginTag</string>
+    <string name="map_fragment_tag">mapTag</string>
+    <string name="settings_icon_title">Settings</string>
+    <string name="search_icon_title">Search</string>
 
     <string name="server_host">Server Host</string>
     <string name="server_port">Server Port</string>
@@ -24,4 +28,8 @@
 
     <string name="life_event_list">Life Events</string>
     <string name="direct_family_list">Family</string>
+
+    <string name="eventID_intent">eventIDIntent</string>
+    <string name="personID_intent">personIDIntent</string>
+    <string name="eventID_bundle">eventIDBundle</string>
 </resources>
