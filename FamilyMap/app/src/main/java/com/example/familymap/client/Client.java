@@ -6,16 +6,23 @@ import com.example.shared.model_.Person;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class Client {
     private static Client instance;
-
     private Person person;
+
     private Event[] familyEvents;
     private Person[] usersFamily;
     private HashMap<String, Person> userFamilyDict;
     private HashMap<String, List<Event>> userEventDict;
+
+    private HashSet<String> fatherSidePersonIDSet;
+    private HashSet<String> motherSidePersonIDSet;
+    private List<Event> filteredFamilyEvents;
+    private HashMap<String, List<Event>> filteredEventDict;
+
     private HashMap<String, Float> eventColors = new HashMap<String, Float>();
     static final private String[] colors = { "210.0", "240.0", "180.0", "120.0", "30.0", "0.0", "330.0", "60.0" };
     private Event curEventViewed;
@@ -80,6 +87,38 @@ public class Client {
         this.userEventDict = userEventDict;
     }
 
+    public HashSet<String> getFatherSidePersonIDSet() {
+        return fatherSidePersonIDSet;
+    }
+
+    public void setFatherSidePersonIDSet(HashSet<String> fatherSidePersonIDSet) {
+        this.fatherSidePersonIDSet = fatherSidePersonIDSet;
+    }
+
+    public HashSet<String> getMotherSidePersonIDSet() {
+        return motherSidePersonIDSet;
+    }
+
+    public void setMotherSidePersonIDSet(HashSet<String> motherSidePersonIDSet) {
+        this.motherSidePersonIDSet = motherSidePersonIDSet;
+    }
+
+    public List<Event> getFilteredFamilyEvents() {
+        return filteredFamilyEvents;
+    }
+
+    public void setFilteredFamilyEvents(List<Event> filteredFamilyEvents) {
+        this.filteredFamilyEvents = filteredFamilyEvents;
+    }
+
+    public HashMap<String, List<Event>> getFilteredEventDict() {
+        return filteredEventDict;
+    }
+
+    public void setFilteredEventDict(HashMap<String, List<Event>> filteredEventDict) {
+        this.filteredEventDict = filteredEventDict;
+    }
+
     public HashMap<String, Float> getEventColors() {
         return eventColors;
     }
@@ -101,7 +140,7 @@ public class Client {
     }
 
     public List<Event> getLifeEvents(String personID) {
-        List<Event> events = getUserEventDict().get(personID);   // Get events for person
+        List<Event> events = getFilteredEventDict().get(personID);   // Get events for person
 
         // Sort events by birth, death, year, and alphanumerics
         Collections.sort(events, new Comparator<Event>() {
@@ -153,5 +192,10 @@ public class Client {
             }
         });
         return events;
+    }
+
+    public void reset() {
+        // Call on logout
+        instance = null;
     }
 }

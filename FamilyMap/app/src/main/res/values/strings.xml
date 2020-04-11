@@ -32,4 +32,21 @@
     <string name="eventID_intent">eventIDIntent</string>
     <string name="personID_intent">personIDIntent</string>
     <string name="eventID_bundle">eventIDBundle</string>
+
+    <string name="life_story_lines_title">Life Story Lines</string>
+    <string name="life_story_lines_setting">Show life story lines</string>
+    <string name="family_tree_lines_title">Family Tree Lines</string>
+    <string name="family_tree_lines_setting">Show family tree lines</string>
+    <string name="spouse_lines_title">Spouse Lines</string>
+    <string name="spouse_lines_setting">Show spouse lines</string>
+    <string name="father_side_title">Father\'s Side</string>
+    <string name="father_side_setting">Filter by father\'s side of family</string>
+    <string name="mother_side_title">Mother\'s Side</string>
+    <string name="mother_side_setting">Filter by mother\'s side of family</string>
+    <string name="male_event_title">Male Events</string>
+    <string name="male_event_setting">Filter events based on gender</string>
+    <string name="female_event_title">Female Events</string>
+    <string name="female_event_setting">Filter events based on gender</string>
+    <string name="logout_title">Logout</string>
+    <string name="logout_setting">Return to login screen</string>
 </resources>

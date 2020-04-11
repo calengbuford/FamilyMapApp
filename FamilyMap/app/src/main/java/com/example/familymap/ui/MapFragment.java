@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.example.familymap.R;
 
+import java.util.List;
+
 
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
     private GoogleMap map;
@@ -43,7 +46,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         // Check if the bundle has arguments
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            eventIDBundle = bundle.getString( String.valueOf(R.string.eventID_bundle));
+            eventIDBundle = bundle.getString(String.valueOf(R.string.eventID_bundle));
             System.out.println("eventIDBundle" + eventIDBundle);
         }
         // If null, then we are not in an Event activity
@@ -78,7 +81,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
             float color = 0;
 
             Event curEventViewed = client.getCurEventViewed();
-            Event[] familyEvents = client.getFamilyEvents();
+            List<Event> familyEvents = client.getFilteredFamilyEvents();
 
             for (Event event : familyEvents) {
                 color = client.getEventColors().get(event.getEventType());
@@ -188,6 +191,15 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         Intent intent = new Intent(parent, SettingsActivity.class);
         if (parent != null) {
             parent.startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (map != null) {
+            map.clear();
+            onMapReady(map);
         }
     }
 
