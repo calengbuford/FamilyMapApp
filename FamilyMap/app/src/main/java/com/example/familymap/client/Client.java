@@ -3,6 +3,7 @@ package com.example.familymap.client;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -142,55 +143,59 @@ public class Client {
     public List<Event> getLifeEvents(String personID) {
         List<Event> events = getFilteredEventDict().get(personID);   // Get events for person
 
+        if (events == null) {
+            return new ArrayList<Event>();
+        }
+
         // Sort events by birth, death, year, and alphanumerics
-        Collections.sort(events, new Comparator<Event>() {
-            @Override
-            public int compare(Event e1, Event e2) {
-                String eType1 = e1.getEventType().toLowerCase();
-                String eType2 = e2.getEventType().toLowerCase();
-                Integer eYear1 = e1.getYear();
-                Integer eYear2 = e2.getYear();
-                String birthStr = "birth";
-                String deathStr = "death";
+        if (events.size() > 0) {
+            Collections.sort(events, new Comparator<Event>() {
+                @Override
+                public int compare(Event e1, Event e2) {
+                    String eType1 = e1.getEventType().toLowerCase();
+                    String eType2 = e2.getEventType().toLowerCase();
+                    Integer eYear1 = e1.getYear();
+                    Integer eYear2 = e2.getYear();
+                    String birthStr = "birth";
+                    String deathStr = "death";
 
-                // Set the birth event to be first
-                if (birthStr.equals(eType1)) {
-                    if (birthStr.equals(eType2)) {
-                        return 0;
-                    }
-                    return -1;
-                }
-                if (birthStr.equals(eType2)) {
-                    return 1;
-                }
-
-                // Set the death event to be first
-                if (deathStr.equals(eType1)) {
-                    if (deathStr.equals(eType2)) {
-                        return 0;
-                    }
-                    return 1;
-                }
-                if (deathStr.equals(eType2)) {
-                    return -1;
-                }
-
-                // Compare the years of the event
-                if (eYear1 < eYear2) {
-                    return -1;
-                }
-                else if (eYear1 == eYear2) {
-                    if (eType1.compareTo(eType1) < 0) {
+                    // Set the birth event to be first
+                    if (birthStr.equals(eType1)) {
+                        if (birthStr.equals(eType2)) {
+                            return 0;
+                        }
                         return -1;
+                    }
+                    if (birthStr.equals(eType2)) {
+                        return 1;
+                    }
+
+                    // Set the death event to be first
+                    if (deathStr.equals(eType1)) {
+                        if (deathStr.equals(eType2)) {
+                            return 0;
+                        }
+                        return 1;
+                    }
+                    if (deathStr.equals(eType2)) {
+                        return -1;
+                    }
+
+                    // Compare the years of the event
+                    if (eYear1 < eYear2) {
+                        return -1;
+                    } else if (eYear1 == eYear2) {
+                        if (eType1.compareTo(eType1) < 0) {
+                            return -1;
+                        }
+                        return 0;
+                    } else if (eYear1 > eYear2) {
+                        return 1;
                     }
                     return 0;
                 }
-                else if (eYear1 > eYear2) {
-                    return 1;
-                }
-                return 0;
-            }
-        });
+            });
+        }
         return events;
     }
 

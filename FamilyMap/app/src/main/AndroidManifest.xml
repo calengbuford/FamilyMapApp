@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.FilterActivity"></activity>
+        <activity android:name=".activities.EventActivity"></activity>
+        <activity android:name=".activities.FilterActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.SearchActivity" />
         <activity

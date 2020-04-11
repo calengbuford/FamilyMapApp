@@ -206,7 +206,7 @@ public class PersonActivity extends AppCompatActivity {
                     initializeEventsView(itemView, childPosition);
                     break;
                 case FAMILY_GROUP_POSITION:
-                    itemView = getLayoutInflater().inflate(R.layout.direct_family_item, parent, false);
+                    itemView = getLayoutInflater().inflate(R.layout.person_item, parent, false);
                     initializeDirectFamilyView(itemView, childPosition);
                     break;
                 default:
@@ -244,11 +244,11 @@ public class PersonActivity extends AppCompatActivity {
 
         private void initializeDirectFamilyView(View directFamilyView, final int childPosition) {
             // Connect with view and update fields
-            TextView nameText = directFamilyView.findViewById(R.id.directFamilyName);
+            TextView nameText = directFamilyView.findViewById(R.id.personName);
             String nameString = directFamily.get(childPosition).getFirstName() + " " + directFamily.get(childPosition).getLastName();
             nameText.setText(nameString);
 
-            TextView titleText = directFamilyView.findViewById(R.id.directFamilyTitle);
+            TextView titleText = directFamilyView.findViewById(R.id.personTitle);
             String titleString = familyTitles.get(childPosition);
             titleText.setText(titleString);
 
