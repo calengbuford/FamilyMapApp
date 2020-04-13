@@ -276,8 +276,9 @@ public class PersonActivity extends AppCompatActivity {
         }
 
         private void clickEvent(String eventID) {
-            // Open event activity, which is the same Map Fragment in the main activity.
-            Intent intent = new Intent(PersonActivity.this, MainActivity.class);
+            // Open event activity
+//            Intent intent = new Intent(PersonActivity.this, MainActivity.class);
+            Intent intent = new Intent(PersonActivity.this, EventActivity.class);
             intent.putExtra(String.valueOf(R.string.eventID_intent), eventID);
             PersonActivity.this.startActivity(intent);
 

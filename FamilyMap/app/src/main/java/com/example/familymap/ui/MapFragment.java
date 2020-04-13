@@ -1,5 +1,6 @@
 package com.example.familymap.ui;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.familymap.activities.EventActivity;
 import com.example.familymap.activities.MainActivity;
 import com.example.familymap.activities.PersonActivity;
 import com.example.familymap.activities.SearchActivity;
@@ -37,6 +39,8 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     private Client client;
     private View view;
     private String eventIDBundle = null;
+    private boolean fromMainActivity = false;
+    private Activity parent;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,20 +48,31 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
         // Check if the bundle has arguments
         Bundle bundle = this.getArguments();
+        System.out.println("bundle: " + bundle);
+
         if (bundle != null) {
             eventIDBundle = bundle.getString(String.valueOf(R.string.eventID_bundle));
-            System.out.println("eventIDBundle" + eventIDBundle);
-        }
-        // If null, then we are not in an Event activity
-        if (eventIDBundle == null) {
+
+            System.out.println("event bundle: " + eventIDBundle);
+
             // Set menu options if NOT in an Event activity
-            setHasOptionsMenu(true);
-        }
-        else {
+            if ("none".equals(eventIDBundle)) {
+                System.out.println("In MAIN activity!!!!!!!!!!!!!!!");
+                fromMainActivity = true;
+                setHasOptionsMenu(true);
+                parent = (MainActivity) getActivity();
+            }
             // Set the up button if in an Event activity
-            MainActivity parent = (MainActivity) getActivity();
-            if (parent != null && parent.getSupportActionBar() != null) {
-                parent.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            else {
+                System.out.println("In EVENT activity!!!!!!!!!!!!!!!");
+                parent = (EventActivity) getActivity();
+                EventActivity parent = (EventActivity) getActivity();
+                if (parent != null && parent.getSupportActionBar() != null) {
+                    parent.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                }
+                if (parent != null && parent.getActionBar() != null) {
+                    parent.getActionBar().setDisplayHomeAsUpEnabled(true);
+                }
             }
         }
 
@@ -168,7 +183,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
     private void clickEventInfoLayout(Event event) {
-        MainActivity parent = (MainActivity) getActivity();
+//        MainActivity parent = (MainActivity) getActivity();
         Intent myIntent = new Intent(parent, PersonActivity.class);
         myIntent.putExtra(String.valueOf(R.string.personID_intent), event.getPersonID());
         client.setCurEventViewed(event);
@@ -178,7 +193,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
     public void clickSearchButton() {
-        MainActivity parent = (MainActivity) getActivity();
+//        MainActivity parent = (MainActivity) getActivity();
         Intent intent = new Intent(parent, SearchActivity.class);
         if (parent != null) {
             parent.startActivity(intent);
@@ -186,7 +201,7 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
     public void clickSettingsButton() {
-        MainActivity parent = (MainActivity) getActivity();
+//        MainActivity parent = (MainActivity) getActivity();
         Intent intent = new Intent(parent, SettingsActivity.class);
         if (parent != null) {
             parent.startActivity(intent);

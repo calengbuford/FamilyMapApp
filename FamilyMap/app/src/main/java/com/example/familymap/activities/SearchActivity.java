@@ -233,9 +233,10 @@ public class SearchActivity extends AppCompatActivity {
                 intent.putExtra(String.valueOf(R.string.personID_intent), person.getPersonID());
                 SearchActivity.this.startActivity(intent);
             } else {
-                // Open Event Activity
-
-
+                // Open event activity
+                Intent intent = new Intent(SearchActivity.this, EventActivity.class);
+                intent.putExtra(String.valueOf(R.string.eventID_intent), event.getEventID());
+                SearchActivity.this.startActivity(intent);
             }
         }
     }

@@ -318,9 +318,9 @@ public class LoginFragment extends Fragment implements LoginTask.Listener, Regis
     @Override
     public void dataSyncTaskComplete(Boolean syncSuccess) {
         if (syncSuccess) {
-            String toastMessage = "Welcome " + client.getPerson().getFirstName() + " " + client.getPerson().getLastName();
-            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
-            toast.show();
+//            String toastMessage = "Welcome " + client.getPerson().getFirstName() + " " + client.getPerson().getLastName();
+//            Toast toast = Toast.makeText(getActivity(), toastMessage, Toast.LENGTH_SHORT);
+//            toast.show();
             closeSelfFragment();
         }
         else {

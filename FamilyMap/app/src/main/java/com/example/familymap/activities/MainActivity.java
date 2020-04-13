@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Inflate the login fragment
         FragmentManager fm = this.getSupportFragmentManager();
-//        LoginFragment loginFragment = (LoginFragment) fm.findFragmentById(R.id.fragment_login);
 
         // If client is null, then the user has not logged in. Otherwise, reload the Map Fragment.
         if (client.getPerson() == null) {
@@ -34,16 +32,11 @@ public class MainActivity extends AppCompatActivity {
         }
         else {
             MapFragment mapFragment = new MapFragment();
-            Intent intent = getIntent();
-            if (intent.hasExtra(String.valueOf(R.string.eventID_intent))) {
-                // Get the eventID from the intent
-                String eventID = intent.getStringExtra(String.valueOf(R.string.eventID_intent));
 
-                // Create the bundle with the eventID as a value
-                Bundle bundle = new Bundle();
-                bundle.putString(String.valueOf(R.string.eventID_bundle), eventID);
-                mapFragment.setArguments(bundle);
-            }
+            // Create the bundle with the eventID as a none
+            Bundle bundle = new Bundle();
+            bundle.putString(String.valueOf(R.string.eventID_bundle), "none");
+            mapFragment.setArguments(bundle);
             fm.beginTransaction().add(R.id.main_fragment, mapFragment, String.valueOf(R.string.map_fragment_tag)).commit();
         }
     }
@@ -53,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
             // Get map fragment
             FragmentTransaction fmTransaction = this.getSupportFragmentManager().beginTransaction();
             MapFragment mapFragment = new MapFragment();
+
+            // Create the bundle with the eventID as a none
+            Bundle bundle = new Bundle();
+            bundle.putString(String.valueOf(R.string.eventID_bundle), "none");
+            mapFragment.setArguments(bundle);
 
             // Replace login fragment with map fragment
             fmTransaction.replace(R.id.main_fragment, mapFragment, String.valueOf(R.string.map_fragment_tag));
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Check that the login fragment is not displaying
         LoginFragment loginFragment = (LoginFragment) getSupportFragmentManager().findFragmentByTag(String.valueOf(R.string.login_fragment_tag));
-        if (loginFragment != null && !loginFragment.isVisible()) {
+        if (!(loginFragment != null && loginFragment.isVisible())) {
             // Inflate the menu and add items to the action bar
             getMenuInflater().inflate(R.menu.menu_icons, menu);
         }

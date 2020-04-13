@@ -16,10 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.EventActivity"></activity>
-        <activity android:name=".activities.FilterActivity" />
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.SearchActivity" />
+        <activity android:name=".activities.EventActivity" android:launchMode="singleTop" android:parentActivityName=".activities.MainActivity" />
+        <activity android:name=".activities.FilterActivity" android:launchMode="singleTop" android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.SettingsActivity" android:launchMode="singleTop" android:parentActivityName=".activities.MainActivity"/>
+        <activity android:name=".activities.SearchActivity" android:launchMode="singleTop" android:parentActivityName=".activities.MainActivity"/>
         <activity
             android:name=".activities.PersonActivity"
             android:parentActivityName=".activities.MainActivity" />
@@ -35,7 +35,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.MainActivity" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
