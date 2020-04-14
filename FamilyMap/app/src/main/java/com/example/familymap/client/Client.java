@@ -184,15 +184,14 @@ public class Client {
                     // Compare the years of the event
                     if (eYear1 < eYear2) {
                         return -1;
-                    } else if (eYear1 == eYear2) {
-                        if (eType1.compareTo(eType1) < 0) {
+                    } else if (eYear1.equals(eYear2)) {
+                        if (eType1.compareTo(eType2) < 0) {
                             return -1;
                         }
                         return 0;
-                    } else if (eYear1 > eYear2) {
+                    } else {
                         return 1;
                     }
-                    return 0;
                 }
             });
         }

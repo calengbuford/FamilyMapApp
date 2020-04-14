@@ -142,8 +142,8 @@ public class DataSyncTask extends AsyncTask<String, Void, Boolean> {
                 allEventsArray.add(event);                         // For filtering later
 
                 // Add event type to color dictionary if necessary
-                if (!client.getEventColors().containsKey(event.getEventType())) {
-                    client.getEventColors().put(event.getEventType(), Float.valueOf(colors[counter % colors.length]));
+                if (!client.getEventColors().containsKey(event.getEventType().toLowerCase())) {
+                    client.getEventColors().put(event.getEventType().toLowerCase(), Float.valueOf(colors[counter % colors.length]));
                 }
                 counter++;
             }

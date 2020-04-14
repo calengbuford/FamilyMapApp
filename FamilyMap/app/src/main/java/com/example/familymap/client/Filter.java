@@ -1,14 +1,10 @@
 package com.example.familymap.client;
 
-import android.widget.Switch;
-
-import com.example.familymap.R;
 import com.example.familymap.activities.SettingsActivity;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;

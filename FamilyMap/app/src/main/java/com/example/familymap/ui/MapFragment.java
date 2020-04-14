@@ -2,6 +2,7 @@ package com.example.familymap.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,6 +19,7 @@ import com.example.familymap.activities.PersonActivity;
 import com.example.familymap.activities.SearchActivity;
 import com.example.familymap.activities.SettingsActivity;
 import com.example.familymap.client.Client;
+import com.example.familymap.client.Settings;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,17 +32,25 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.example.familymap.R;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 
 public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickListener, OnMapReadyCallback, GoogleMap.OnMapLoadedCallback {
     private GoogleMap map;
     private Client client;
+    private Settings settings;
     private View view;
     private String eventIDBundle = null;
-    private boolean fromMainActivity = false;
     private Activity parent;
+    private List<Polyline> allPolylines = new ArrayList<Polyline>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,23 +58,18 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
 
         // Check if the bundle has arguments
         Bundle bundle = this.getArguments();
-        System.out.println("bundle: " + bundle);
-
         if (bundle != null) {
             eventIDBundle = bundle.getString(String.valueOf(R.string.eventID_bundle));
-
-            System.out.println("event bundle: " + eventIDBundle);
 
             // Set menu options if NOT in an Event activity
             if ("none".equals(eventIDBundle)) {
                 System.out.println("In MAIN activity!!!!!!!!!!!!!!!");
-                fromMainActivity = true;
                 setHasOptionsMenu(true);
                 parent = (MainActivity) getActivity();
             }
             // Set the up button if in an Event activity
             else {
-                System.out.println("In EVENT activity!!!!!!!!!!!!!!!");
+                System.out.println("In EVENT activity!!!!!!!!!!!!!!");
                 parent = (EventActivity) getActivity();
                 EventActivity parent = (EventActivity) getActivity();
                 if (parent != null && parent.getSupportActionBar() != null) {
@@ -92,13 +97,14 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
             map.setOnMapLoadedCallback(this);
 
             client = Client.getInstance();
+            settings = Settings.getInstance();
             float color = 0;
 
             Event curEventViewed = client.getCurEventViewed();
             List<Event> familyEvents = client.getFilteredFamilyEvents();
 
             for (Event event : familyEvents) {
-                color = client.getEventColors().get(event.getEventType());
+                color = client.getEventColors().get(event.getEventType().toLowerCase());
 
                 // Add the event to the map as a marker
                 Marker marker = map.addMarker(new MarkerOptions()
@@ -168,6 +174,9 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
                 }
             }
 
+            // Draw any lines according to filters
+            drawPolylines(event);
+
             // Click listener on event info layout
             View layout = (View) view.findViewById(R.id.mapInfoView);
             layout.setOnClickListener(new View.OnClickListener()
@@ -182,8 +191,116 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
         return false;
     }
 
+    private void drawPolylines(Event markerEvent) {
+        clearPolylines();   // Remove all lines from graph
+
+        // Add lines according to settings switches
+        if (settings.getLifeStoryLinesSwitchStatus()) {
+            List<Event> events = getLifeStoryLineEvents(markerEvent.getPersonID());
+
+            if (events != null) {
+                // Add points to ArrayList
+                ArrayList<LatLng> coordinateList = new ArrayList<LatLng>();
+                for (int i = 0; i < events.size(); i++) {
+                    coordinateList.add(new LatLng(events.get(i).getLatitude(), events.get(i).getLongitude()));
+                }
+
+                // Create polyline options
+                PolylineOptions polylineOptions = new PolylineOptions();    // Initialize polyline to be drawn
+                polylineOptions.addAll(coordinateList);
+                polylineOptions.color(Color.BLUE);
+
+                // Add multiple plot lines to map and to the total list of polylines
+                allPolylines.add(map.addPolyline(polylineOptions));
+            }
+        }
+        if (settings.getFamilyTreeLinesSwitchStatus()) {
+            drawFamilyTree(markerEvent, markerEvent.getPersonID(), 0);
+        }
+        if (settings.getSpouseLinesSwitchStatus()) {
+            Event event = getSpouseLineEvent(markerEvent.getPersonID());
+
+            if (event != null) {
+                // Create polyline options
+                PolylineOptions polylineOptions = new PolylineOptions();    // Initialize polyline to be drawn
+                polylineOptions.add(new LatLng(markerEvent.getLatitude(), markerEvent.getLongitude()),
+                        new LatLng(event.getLatitude(), event.getLongitude()));
+                polylineOptions.color(Color.RED);
+
+                // Add multiple plot lines to map
+                allPolylines.add(map.addPolyline(polylineOptions));
+            }
+        }
+
+    }
+
+    private List<Event> getLifeStoryLineEvents(String personID) {
+        return client.getLifeEvents(personID);
+    }
+
+    private void drawFamilyTree(Event childEvent, String personID, Integer genFromPerson) {
+        // Call recursion on ancestors
+        Person person = client.getUserFamilyDict().get(personID);
+        float lineWidth = (float)(25 / (1 + genFromPerson));
+        if (lineWidth < 1) {
+            lineWidth = (float) 1;
+        }
+
+        if (person != null && person.getFatherID() != null) {
+            List<Event> parentEvents = client.getLifeEvents(person.getFatherID());  // Father's life events
+            if (parentEvents != null && parentEvents.size() > 0) {
+                addOnePolylineToMap(childEvent, parentEvents.get(0), lineWidth);
+                drawFamilyTree(parentEvents.get(0), person.getFatherID(), genFromPerson + 1);
+            }
+            else {
+                drawFamilyTree(childEvent, person.getFatherID(), genFromPerson + 1);
+            }
+        }
+        if (person != null && person.getMotherID() != null) {
+            List<Event> parentEvents = client.getLifeEvents(person.getMotherID());  // Mother's life events
+            if (parentEvents != null && parentEvents.size() > 0) {
+                addOnePolylineToMap(childEvent, parentEvents.get(0), lineWidth);
+                drawFamilyTree(parentEvents.get(0), person.getMotherID(), genFromPerson + 1);
+            }
+            else {
+                drawFamilyTree(childEvent, person.getMotherID(), genFromPerson + 1);
+            }
+        }
+    }
+
+    private Event getSpouseLineEvent(String personID) {
+        Person person = client.getUserFamilyDict().get(personID);   // Get person from the client
+        if (person != null && person.getSpouseID() != null) {
+            if (client.getLifeEvents(person.getSpouseID()).size() > 0) {
+                return client.getLifeEvents(person.getSpouseID()).get(0);   // Get the first event of their spouse
+            }
+        }
+        return null;
+    }
+
+    private void addOnePolylineToMap(Event event1, Event event2, float lineWidth) {
+        // Create polyline options
+        PolylineOptions polylineOptions = new PolylineOptions();    // Initialize polyline to be drawn
+        polylineOptions.add(new LatLng(event1.getLatitude(), event1.getLongitude()),
+                new LatLng(event2.getLatitude(), event2.getLongitude()));
+        polylineOptions
+                .width(lineWidth)
+                .color(Color.MAGENTA);
+
+        // Add multiple plot lines to map
+        allPolylines.add(map.addPolyline(polylineOptions));
+    }
+
+    private void clearPolylines() {
+        // Remove all polylines from the map
+        for(Polyline line : allPolylines)
+        {
+            line.remove();
+        }
+        allPolylines.clear();
+    }
+
     private void clickEventInfoLayout(Event event) {
-//        MainActivity parent = (MainActivity) getActivity();
         Intent myIntent = new Intent(parent, PersonActivity.class);
         myIntent.putExtra(String.valueOf(R.string.personID_intent), event.getPersonID());
         client.setCurEventViewed(event);
@@ -193,7 +310,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
     public void clickSearchButton() {
-//        MainActivity parent = (MainActivity) getActivity();
         Intent intent = new Intent(parent, SearchActivity.class);
         if (parent != null) {
             parent.startActivity(intent);
@@ -201,7 +317,6 @@ public class MapFragment extends Fragment implements GoogleMap.OnMarkerClickList
     }
 
     public void clickSettingsButton() {
-//        MainActivity parent = (MainActivity) getActivity();
         Intent intent = new Intent(parent, SettingsActivity.class);
         if (parent != null) {
             parent.startActivity(intent);

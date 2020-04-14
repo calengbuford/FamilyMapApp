@@ -24,31 +24,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="10.0.2.2"
                 android:hint="@string/server_host"/>
-
             <EditText
                 android:id="@+id/serverPortTextEntry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="8080"
                 android:hint="@string/server_port"/>
-
             <EditText
                 android:id="@+id/usernameTextEntry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:text="user"
                 android:hint="@string/username"/>
-
             <EditText
                 android:id="@+id/passwordTextEntry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:text="pass"
                 android:hint="@string/password"/>
 
             <EditText
