@@ -11,9 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 
 import com.example.familymap.R;
-import com.example.familymap.client.*;
-
-import kotlin.jvm.internal.MagicApiIntrinsics;
+import com.example.familymap.model.*;
 
 public class SettingsActivity extends AppCompatActivity {
     final Client client = Client.getInstance();
@@ -93,8 +91,6 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 client.reset();     // Set null the instance of client
                 settings.reset();   // Set null the instance of settings
-
-                System.out.println("CLICKED LOGOUT!!!!!!!");
 
                 // Go to Main Activity
                 finishAffinity();

@@ -2,8 +2,8 @@ package com.example.familymap.network;
 
 import android.os.AsyncTask;
 
-import com.example.familymap.client.Client;
-import com.example.familymap.client.Filter;
+import com.example.familymap.model.Client;
+import com.example.familymap.model.Filter;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 import com.example.shared.response_.PersonIDResponse;

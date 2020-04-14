@@ -3,7 +3,7 @@ package com.example.server.service_;
 import com.example.server.dao_.*;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
-import com.example.shared.model_.User;
+import com.example.server.model_.User;
 import com.example.server.request_.LoadRequest;
 import com.example.server.response_.LoadResponse;
 

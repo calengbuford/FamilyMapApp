@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.familymap.R;
 import com.example.familymap.activities.MainActivity;
-import com.example.familymap.client.Client;
+import com.example.familymap.model.Client;
 import com.example.familymap.network.DataSyncTask;
 import com.example.familymap.network.LoginTask;
 import com.example.familymap.network.RegisterTask;

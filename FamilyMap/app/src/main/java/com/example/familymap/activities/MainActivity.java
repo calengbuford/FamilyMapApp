@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.familymap.R;
-import com.example.familymap.client.Client;
+import com.example.familymap.model.Client;
 import com.example.familymap.ui.LoginFragment;
 import com.example.familymap.ui.MapFragment;
 

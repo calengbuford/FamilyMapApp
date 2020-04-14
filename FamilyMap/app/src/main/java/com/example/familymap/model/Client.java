@@ -1,4 +1,4 @@
-package com.example.familymap.client;
+package com.example.familymap.model;
 
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;

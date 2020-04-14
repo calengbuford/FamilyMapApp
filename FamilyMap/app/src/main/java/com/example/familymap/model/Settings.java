@@ -1,4 +1,4 @@
-package com.example.familymap.client;
+package com.example.familymap.model;
 
 public class Settings {
     private static Settings instance;

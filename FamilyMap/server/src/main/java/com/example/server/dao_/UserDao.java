@@ -1,6 +1,6 @@
 package com.example.server.dao_;
 
-import com.example.shared.model_.User;
+import com.example.server.model_.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

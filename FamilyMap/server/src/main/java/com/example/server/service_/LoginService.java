@@ -4,7 +4,7 @@ import com.example.server.dao_.AuthTokenDao;
 import com.example.server.dao_.Database;
 import com.example.server.dao_.UserDao;
 import com.example.shared.model_.AuthToken;
-import com.example.shared.model_.User;
+import com.example.server.model_.User;
 import com.example.shared.request_.LoginRequest;
 import com.example.shared.response_.LoginResponse;
 

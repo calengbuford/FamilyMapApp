@@ -18,8 +18,8 @@ import com.example.familymap.activities.MainActivity;
 import com.example.familymap.activities.PersonActivity;
 import com.example.familymap.activities.SearchActivity;
 import com.example.familymap.activities.SettingsActivity;
-import com.example.familymap.client.Client;
-import com.example.familymap.client.Settings;
+import com.example.familymap.model.Client;
+import com.example.familymap.model.Settings;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,10 +36,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 

@@ -2,7 +2,6 @@ package com.example.familymap.network;
 
 import com.example.shared.request_.LoginRequest;
 import com.example.shared.request_.RegisterRequest;
-import com.example.shared.request_.PersonRequest;
 import com.example.shared.response_.EventIDResponse;
 import com.example.shared.response_.EventResponse;
 import com.example.shared.response_.LoginResponse;

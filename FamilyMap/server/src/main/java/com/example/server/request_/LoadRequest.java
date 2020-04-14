@@ -2,7 +2,7 @@ package com.example.server.request_;
 
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
-import com.example.shared.model_.User;
+import com.example.server.model_.User;
 
 public class LoadRequest {
     private User[] users = null;

@@ -5,7 +5,7 @@ import com.example.server.dao_.*;
 import com.example.server.data_.*;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
-import com.example.shared.model_.User;
+import com.example.server.model_.User;
 import com.example.server.request_.FillRequest;
 import com.example.server.response_.FillResponse;
 

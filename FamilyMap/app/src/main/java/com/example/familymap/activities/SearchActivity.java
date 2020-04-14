@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.familymap.R;
-import com.example.familymap.client.Client;
+import com.example.familymap.model.Client;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 
