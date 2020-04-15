@@ -2,7 +2,6 @@ package com.example.familymap.network;
 
 import com.example.shared.request_.LoginRequest;
 import com.example.shared.request_.RegisterRequest;
-import com.example.shared.response_.EventIDResponse;
 import com.example.shared.response_.EventResponse;
 import com.example.shared.response_.LoginResponse;
 import com.example.shared.response_.PersonIDResponse;
@@ -15,6 +14,13 @@ import java.net.*;
 
 public class Proxy {
 
+    /**
+     * Log in a user
+     * @param serverHost Host to connect with server
+     * @param serverPort Port to connect with server
+     * @param request Request Body to be sent to server
+     * @return LoginResponse object
+     */
     public static LoginResponse login(String serverHost, String serverPort, LoginRequest request) {
         Gson gson = new Gson();
 
@@ -58,6 +64,13 @@ public class Proxy {
         return null;
     }
 
+    /**
+     * Register a user
+     * @param serverHost Host to connect with server
+     * @param serverPort Port to connect with server
+     * @param request Request Body to be sent to server
+     * @return RegisterResponse object
+     */
     public static RegisterResponse register(String serverHost, String serverPort, RegisterRequest request) {
         Gson gson = new Gson();
 
@@ -101,6 +114,13 @@ public class Proxy {
         return null;
     }
 
+    /**
+     * Get a person based on their personID
+     * @param serverHost Host to connect with server
+     * @param serverPort Port to connect with server
+     * @param authToken header used to query database
+     * @return PersonIDResponse object
+     */
     public static PersonIDResponse getPersonID(String serverHost, String serverPort, String personID, String authToken) {
         Gson gson = new Gson();
 
@@ -138,6 +158,13 @@ public class Proxy {
         return null;
     }
 
+    /**
+     * Get all the family persons
+     * @param serverHost Host to connect with server
+     * @param serverPort Port to connect with server
+     * @param authToken header used to query database
+     * @return PersonResponse object
+     */
     public static PersonResponse dataSyncPersons(String serverHost, String serverPort, String authToken) {
         Gson gson = new Gson();
 
@@ -175,6 +202,13 @@ public class Proxy {
         return null;
     }
 
+    /**
+     * Get all the family events
+     * @param serverHost Host to connect with server
+     * @param serverPort Port to connect with server
+     * @param authToken header used to query database
+     * @return EventResponse object
+     */
     public static EventResponse dataSyncEvents(String serverHost, String serverPort, String authToken) {
         Gson gson = new Gson();
 
@@ -213,9 +247,6 @@ public class Proxy {
         return null;
     }
 
-    /*
-        The readString method shows how to read a String from an InputStream.
-    */
     private static String readString(InputStream is) throws IOException {
         StringBuilder sb = new StringBuilder();
         InputStreamReader sr = new InputStreamReader(is);
@@ -227,9 +258,6 @@ public class Proxy {
         return sb.toString();
     }
 
-    /*
-        The writeString method shows how to write a String to an OutputStream.
-    */
     private static void writeString(String str, OutputStream os) throws IOException {
         OutputStreamWriter sw = new OutputStreamWriter(os);
         sw.write(str);

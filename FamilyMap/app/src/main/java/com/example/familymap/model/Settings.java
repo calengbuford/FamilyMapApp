@@ -20,7 +20,9 @@ public class Settings {
         femaleEventSwitchStatus = true;
     }
 
-    // Constructor and getter of instance
+    /**
+     * Constructor and getter of instance
+     */
     public static Settings getInstance() {
         if (instance == null) {
             instance = new Settings();
@@ -84,8 +86,10 @@ public class Settings {
         this.femaleEventSwitchStatus = femaleEventSwitchStatus;
     }
 
+    /**
+     * Call on logout to reset the settings instance
+     */
     public void reset() {
-        // Call on logout
         instance = null;
     }
 }

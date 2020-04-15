@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * On successful logged in, replace the LoginFragment with the MapFragment
+     */
     public void replaceLoginFragment() {
         try {
             // Get map fragment

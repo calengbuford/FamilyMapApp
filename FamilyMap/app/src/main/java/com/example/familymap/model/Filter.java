@@ -12,6 +12,12 @@ public class Filter {
     private Client client = Client.getInstance();;
     private Settings settings;
 
+    /**
+     * Get all children of a given person
+     * @param family the Person list to iterate over
+     * @param personID the ID of the person acting as parent
+     * @return Person list of all children of person with personID
+     */
     public List<Person> getPersonsChildren(Person[] family, String personID) {
         List<Person> children = new ArrayList<Person>();
 
@@ -38,6 +44,10 @@ public class Filter {
         }
     }
 
+    /**
+     * Get all family members on the father's side of the user
+     * @return the Set of personIDs of family members
+     */
     public HashSet<String> filterFatherSidePersonIDSet() {
         HashSet<String> personIDSet = new HashSet<String>();
 
@@ -47,6 +57,10 @@ public class Filter {
         return personIDSet;
     }
 
+    /**
+     * Get all family members on the mother's side of the user
+     * @return the Set of personIDs of family members
+     */
     public HashSet<String> filterMotherSidePersonIDSet() {
         HashSet<String> personIDSet = new HashSet<String>();
 
@@ -56,6 +70,10 @@ public class Filter {
         return personIDSet;
     }
 
+    /**
+     * Based on the switches in the settings instance, filter all family events
+     * and set the filteredEventDict in the client instance
+     */
     public void filterEvents() {
         settings = Settings.getInstance();
         client = Client.getInstance();

@@ -34,7 +34,9 @@ public class Client {
         usersFamily = null;
     }
 
-    // Constructor and getter of instance
+    /**
+     * Constructor and getter of instance
+     */
     public static Client getInstance() {
         if (instance == null) {
             instance = new Client();
@@ -140,6 +142,11 @@ public class Client {
         this.curEventViewed = curEventViewed;
     }
 
+    /**
+     * Sort events by birth, death, year, and alphanumerics
+     * @param personID of the associated life events
+     * @return sorted list of life events for a given person
+     */
     public List<Event> getLifeEvents(String personID) {
         List<Event> events = getFilteredEventDict().get(personID);   // Get events for person
 
@@ -198,8 +205,10 @@ public class Client {
         return events;
     }
 
+    /**
+     * Call on logout to reset the client instance
+     */
     public void reset() {
-        // Call on logout
         instance = null;
     }
 }
