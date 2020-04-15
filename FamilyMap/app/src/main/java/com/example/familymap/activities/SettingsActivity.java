@@ -105,7 +105,7 @@ public class SettingsActivity extends AppCompatActivity {
         // Filter when user clicks the up button to return to map page
         int id = item.getItemId();
         if (id == android.R.id.home){
-            filter.filterEvents(this);      // Filter events based off of switches
+            filter.filterEvents();      // Filter events based off of switches
             onBackPressed();
             return true;
         }

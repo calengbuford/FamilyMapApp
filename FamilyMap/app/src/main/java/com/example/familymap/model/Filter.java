@@ -1,6 +1,5 @@
 package com.example.familymap.model;
 
-import com.example.familymap.activities.SettingsActivity;
 import com.example.shared.model_.Event;
 import com.example.shared.model_.Person;
 
@@ -26,10 +25,11 @@ public class Filter {
     }
 
     private void parentSideHelper(HashSet<String> set, String personID) {
-        set.add(personID);  // Add person's ID to set
-
         // Add parents' IDs of current person
         Person person = client.getUserFamilyDict().get(personID);
+        if (person != null) {
+            set.add(personID);  // Add person's ID to set
+        }
         if (person != null && person.getFatherID() != null) {
             parentSideHelper(set, person.getFatherID());
         }
@@ -56,7 +56,7 @@ public class Filter {
         return personIDSet;
     }
 
-    public void filterEvents(SettingsActivity settingsActivity) {
+    public void filterEvents() {
         settings = Settings.getInstance();
         client = Client.getInstance();
         HashMap<String, Person> userFamilyDict = client.getUserFamilyDict();

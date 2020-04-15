@@ -151,7 +151,6 @@ public class Proxy {
             http.addRequestProperty("Authorization", authToken);   // Add an auth token to the request header
             http.connect();             // Connect to the server and send the HTTP request
 
-
             // Check that the HTTP response from the server contains a 200 status code
             if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 // Read JSON string from the input stream
@@ -163,43 +162,6 @@ public class Proxy {
 
                 // Call the persons service and get the response
                 PersonResponse response = gson.fromJson(respData, PersonResponse.class);
-                return response;
-            }
-            else {
-                System.out.println("ERROR: " + http.getResponseMessage());
-            }
-        }
-        catch (IOException e) {
-            // An exception was thrown, so display the exception's stack trace
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static EventIDResponse getEventID(String serverHost, String serverPort, String eventID, String authToken) {
-        Gson gson = new Gson();
-
-        try {
-            URL url = new URL("http://" + serverHost + ":" + serverPort + "/person/" + eventID);
-
-            // Start constructing HTTP request
-            HttpURLConnection http = (HttpURLConnection)url.openConnection();
-            http.setRequestMethod("GET");
-            http.setDoOutput(false);    // Indicate that request will not contain an HTTP request body
-            http.addRequestProperty("Authorization", authToken);   // Add an auth token to the request header
-            http.connect();             // Connect to the server and send the HTTP request
-
-            // Check that the HTTP response from the server contains a 200 status code
-            if (http.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                // Read JSON string from the input stream
-                InputStream respJson = http.getInputStream();
-                String respData = readString(respJson);
-
-                // Display the JSON data returned from the server
-                System.out.println(respData);
-
-                // Call the eventID service and get the response
-                EventIDResponse response = gson.fromJson(respData, EventIDResponse.class);
                 return response;
             }
             else {
